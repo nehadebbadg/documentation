@@ -21,7 +21,7 @@ code_clipboard: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the Paymints API! You can use our API to access Paymints API endpoints.
 
 We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
@@ -57,9 +57,9 @@ let api = kittn.authorize('meowmeowmeow');
 
 > Make sure to replace `meowmeowmeow` with your API key.
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+Paymints uses API keys to allow access to the API. You can register a new API key.
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+Paymints expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
 `Authorization: meowmeowmeow`
 
@@ -67,9 +67,9 @@ Kittn expects for the API key to be included in all API requests to the server i
 You must replace <code>meowmeowmeow</code> with your personal API key.
 </aside>
 
-# Kittens
+# Users
 
-## Get All Kittens
+## Get All Users
 
 ```ruby
 require 'kittn'
