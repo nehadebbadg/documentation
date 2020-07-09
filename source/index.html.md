@@ -46,7 +46,7 @@ api = kittn.authorize('meowmeowmeow')
 ```shell
 # With shell, you can just pass the correct header with each request
 curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+  -H "Authorization: your-api-key"
 ```
 
 ```javascript
@@ -61,10 +61,10 @@ Paymints uses API keys to allow access to the API. You can register a new API ke
 
 Paymints expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-`Authorization: meowmeowmeow`
+`Authorization: your-api-key`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>your-api-key</code> with your personal API key.
 </aside>
 
 # Users
@@ -86,8 +86,8 @@ api.kittens.get()
 ```
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl "http://example.com/api/users"
+  -H "Authorization: your-api-key"
 ```
 
 ```javascript
@@ -118,24 +118,18 @@ let kittens = api.kittens.get();
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint returns the list of users.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET http://example.com/api/users`
 
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
 
 <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+Remember — a happy user is an authenticated user!
 </aside>
 
-## Get a Specific Kitten
+## Get All Users for a tenant
 
 ```ruby
 require 'kittn'
@@ -152,8 +146,8 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
+curl "http://example.com/api/users/999999999"
+  -H "Authorization: your-api-key"
 ```
 
 ```javascript
@@ -175,19 +169,74 @@ let max = api.kittens.get(2);
 }
 ```
 
-This endpoint retrieves a specific kitten.
+This endpoint retrieves a specific user.
 
 <aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET http://example.com/users/:tenant_GUID`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to retrieve
+tenant_GUID | The ID of the tenant to retrieve his users.
+
+## Get specific user for a tenant
+
+```ruby
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+api.kittens.get(2)
+```
+
+```python
+import kittn
+
+api = kittn.authorize('meowmeowmeow')
+api.kittens.get(2)
+```
+
+```shell
+curl "http://example.com/api/users/999999999/:user_GUID"
+  -H "Authorization: your-api-key"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.get(2);
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "id": 2,
+  "name": "Max",
+  "breed": "unknown",
+  "fluffiness": 5,
+  "cuteness": 10
+}
+```
+
+This endpoint retrieves a specific user.
+
+<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+
+### HTTP Request
+
+`GET http://example.com/users/:tenant_GUID/:user_GUID`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+tenant_GUID | The ID of the tenant to retrieve his users.
+user_GUID   | The ID of the specific user of the tenant with ID tenant_GUID.
 
 ## Delete a Specific Kitten
 
