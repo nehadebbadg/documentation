@@ -932,7 +932,37 @@ let max = api.kittens.get(2);
 
 ```json
 {
-  
+  "bucket content": {
+        "IsTruncated": true,
+        "Marker": "",
+         "Contents": [
+            {
+                "Key": "**********/branding/Screen Shot 2020-06-09 at 1.36.26 PM.png",
+                "LastModified": "2020-06-16T17:10:48.000Z",
+                "ETag": "\"**********\"",
+                "Size": 590020,
+                "StorageClass": "STANDARD",
+                "Owner": {
+                    "DisplayName": "ashish",
+                    "ID": "**********"
+                }
+            },
+
+            {
+                "Key": "**********/logo/Screen Shot 2020-06-11 at 10.07.33 AM.png",
+                "LastModified": "2020-06-16T20:18:38.000Z",
+                "ETag": "\"**********\"",
+                "Size": 1245030,
+                "StorageClass": "STANDARD",
+                "Owner": {
+                    "DisplayName": "ashish",
+                    "ID": "**********"
+                }
+            },
+            {},
+            {}
+         ]
+      }
 }
 ```
 
@@ -1127,7 +1157,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/assets/private/:TENANT_GUID/:CLIENT_GUID/:TRANSFER_GUID/:ASSET_GUID
+curl "http://example.com/api/assets/private/**********/**********/**********/
   -H "Authorization: your-api-key"
 ```
 
@@ -1142,7 +1172,7 @@ let max = api.kittens.get(2);
 
 ```json
 {
-  
+    "s3Assets": []
 }
 ```
 
