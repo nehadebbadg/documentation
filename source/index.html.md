@@ -69,7 +69,7 @@ You must replace <code>your-api-key</code> with your personal API key.
 
 # Users
 
-## Get All Users
+## Adding new users
 
 ```ruby
 require 'kittn'
@@ -96,40 +96,48 @@ const kittn = require('kittn');
 let api = kittn.authorize('meowmeowmeow');
 let kittens = api.kittens.get();
 ```
-
-> The above command returns JSON structured like this:
+> Request body:
 
 ```json
-[
-  
-]
+{
+    "create_user": {
+      "email": "hiller.stuart+3@gmail.com",
+      "name": "agent hiller3",
+      "connection":"email"
+    },
+    "new_user_role": "paymints_tenant",
+    "role": "paymints_admin"
+  }
 ```
 
-This endpoint returns the list of users.
+> The above command returns:
+
+```json
+{
+    "created user info"
+}
+```
+
+This endpoint adds the list of users. User info passed in must contain email, name, connection. Newly created users will be assigned a role and associted with tenantGUID.
 
 ### HTTP Request
 
-`GET http://example.com/api/users`
+`POST /users`
 
-
-<aside class="success">
-Remember — a happy user is an authenticated user!
-</aside>
-
-## Get All Users for a tenant
+## Get all users of a tenant
 
 ```ruby
 require 'kittn'
 
 api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+api.kittens.get
 ```
 
 ```python
 import kittn
 
 api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+api.kittens.get()
 ```
 
 ```shell
@@ -141,10 +149,10 @@ curl "http://example.com/api/users/**********"
 const kittn = require('kittn');
 
 let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+let kittens = api.kittens.get();
 ```
 
-> The above command returns JSON structured like this:
+> The above command returns:
 
 ```json
 {
@@ -197,11 +205,11 @@ let max = api.kittens.get(2);
 }
 ```
 
-This endpoint retrieves a specific user.
+This endpoint returns the list of users associated with tenant_GUID. 
 
 ### HTTP Request
 
-`GET http://example.com/users/:tenant_GUID`
+`GET /users/{tenant_GUID}`
 
 ### URL Parameters
 
@@ -226,7 +234,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/users/**********/********"
+curl "http://example.com/api/users/**********/**********"
   -H "Authorization: your-api-key"
 ```
 
@@ -237,7 +245,7 @@ let api = kittn.authorize('meowmeowmeow');
 let max = api.kittens.get(2);
 ```
 
-> The above command returns JSON structured like this:
+> The above command returns:
 
 ```json
 {
@@ -265,11 +273,11 @@ let max = api.kittens.get(2);
 }
 ```
 
-This endpoint retrieves a specific user.
+This endpoint retrieves a specific user from a specific tenant.
 
 ### HTTP Request
 
-`GET http://example.com/users/:tenant_GUID/:user_GUID`
+`GET /users/{tenant_GUID}/{user_GUID}`
 
 ### URL Parameters
 
@@ -278,7 +286,7 @@ Parameter | Description
 tenant_GUID | The ID of the tenant to retrieve his users.
 user_GUID   | The ID of the specific user of the tenant with ID tenant_GUID.
 
-## Adding new users
+## Updates specific user for a tenant
 
 ```ruby
 require 'kittn'
@@ -295,7 +303,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/users/"
+curl "http://example.com/api/users/:tenant_GUID/:user_GUID"
   -H "Authorization: your-api-key"
 ```
 
@@ -305,36 +313,29 @@ const kittn = require('kittn');
 let api = kittn.authorize('meowmeowmeow');
 let max = api.kittens.get(2);
 ```
-> Information needed for adding new users
+
+> The above command returns:
 
 ```json
 {
-    "create_user": {
-      "email": "XXXXXXXXX@gmail.com",
-      "name": "XXXXX XXXXXX",
-      "connection":"email"
-    },
-    "new_user_role": "paymints_tenant",
-    "role": "paymints_admin"
+  
 }
 ```
 
-> The above command returns JSON structured like this:
-
-```json
-{
-    "created user info"
-}
-```
-
-This endpoint adds new users. User info passed in must contain email, name, connection
+This endpoint updates specific user.
 
 ### HTTP Request
 
-`POST http://example.com/users/`
+`PATCH /users/{tenant_GUID}/{user_GUID}`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+tenant_GUID | The ID of the tenant to retrieve his users.
+user_GUID   | The ID of the specific user of the tenant with ID tenant_GUID.
 
 # Transfer-service (Plaid And Dwolla API Services)
-
 ## Adding verified customer to Dwolla
 
 ```ruby
@@ -363,36 +364,42 @@ let api = kittn.authorize('meowmeowmeow');
 let kittens = api.kittens.get();
 ```
 
+> The above command returns:
 
-This endpoint will add a verified customer to dwolla, with a funding source, and save dwolla/plaid attributes to the database. {id, plaidAccountId, publicToken} => {success:boolean, bankAccountId}
+```json
+{
+    "success": true,
+    "bankAccountId": "5f112bc579eaf938a65ffc92"
+}
+```
+
+
+This endpoint will add a verified customer to dwolla, with a funding source, and save dwolla/plaid attributes to the database.
 
 <aside class="success">
-This route can also be used for adding a bank account to a customer that already has other bank accounts. (and is already in Dwolla).
+This route can also be used for adding a bank account to a customer that already has other bank accounts. (and is already in Dwolla). The following values must be saved to the Client in the DB prior to the API call: ssn, DateOfBirth, email.
 </aside>
 
 ### HTTP Request
 
-`POST http://example.com/api/account/auth/create-client`
+`POST /account/auth/create-client`
 
-### URL Parameters
+### Request Parameters
 
-Parameter | Description
+Name | Description
 --------- | -----------
-Id | client Id in database
-plaidAccountId   | account id from plaid onSuccess
-publicToken   | public token from plaid onSuccess
-
-The following values must be saved to the Client in the DB prior to the API call: ssn, DateOfBirth, email
+Id | Client ID in database
+plaidAccountId | Account ID from plaid onSuccess
+publicToken | Public token from plaid onSuccess
 
 ### Responses
 
-Parameter | Description
+Name | Description
 --------- | -----------
-successful:200 | success:true, bankAccountId
+successful:200 | success:true, bankAccountId 
 unsuccessful:400   | route, error, success:false
 
-
-## Creating an EscrowAccount by adding a tenant, bank account to Plaid/Dwolla
+## Creating an EscrowAccount
 
 ```ruby
 require 'kittn'
@@ -420,130 +427,40 @@ let api = kittn.authorize('meowmeowmeow');
 let max = api.kittens.get(2);
 ```
 
-This endpoint adds a tenant, bank account to plaid/dwolla. Creates a EscrowAccount with the given information. This route can also be used to add a bank account to a tenant already added. { agentId, plaidAccountId, publicToken } => { success, escrowAccountId }
+> The above command returns:
 
-### HTTP Request
-
-`POST http://example.com/account/auth/:tenant_ID/escrow`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-tenant_ID | Tenant database ID
-agent_ID | Agent database ID
-plaidAccountId | account id from plaid onSuccess
-publicToken | public token from plaid onSuccess
-
-### Responses
-
-Parameter | Description
---------- | -----------
-successful 201 | success:true, escrowAccountId: ID
-unsuccessful:400   | success:false, error: error, route: '/account/auth/create-tenant'
-
-## Subscribing a tenant for billing
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+```json
+{
+  "success": true, 
+  "escrowAccountId": "5ee7c544aa79d44d5f396c46"
+}
 ```
 
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/account/auth/:tenant_ID/billing"
-  -H "Authorization: your-api-key"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-This endpoint subscribes a tenant to be billed monthly & adds a Billing Account. Authenticates account and creates new billing account connected to tenant, adds subscription to Tenant. { plaidAccountId, publictoken, subscriptionId, agentId } => { success, billingAccountId }
+This endpoint adds a tenant, bank account to plaid/dwolla. Creates a EscrowAccount with the given information. This route can also be used to add a bank account to a tenant already added.
 
 <aside class="success">
-This route has the same Tenant, Agent, and Tenant Exec requirements as /account/auth/:tenant_ID/escrow
+The following values must be saved in the DB prior to the API call: businessType (llc, corporation, soleProprietorship), address1, address2 (optional), city, state, zipcode, name, ein (9 digit number).
 </aside>
 
 ### HTTP Request
 
-`POST http://example.com/account/auth/:tenantID/billing`
+`POST /account/auth/{tenant_ID}/escrow`
 
-### URL Parameters
+### Request Parameters
 
-Parameter | Description
+Name | Description
 --------- | -----------
-tenant_ID | Tenant database ID
+agent_ID | Agent database ID
+plaidAccountId | Account ID from plaid onSuccess
+publicToken | Public token from plaid onSuccess
 
 ### Responses
 
-Parameter | Description
+Name | Description
 --------- | -----------
-successful:201 | success: true, billingAccountId: ID
-unsuccessful:400 | success:false, error: error, route: '/account/auth/create-tenant'
+successful 201 | success:true, escrowAccountId: ID
+unsuccessful:400   | success:false, error: error, route: '/account/auth/create-tenant'
 
-## Initiating a transfer
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/transfer/start"
-  -H "Authorization: your-api-key"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-
-This endpoint is the primary route for initiating a transfer. Will initiate an ACH transfer, save dwollaStatus, dwollaSourceURL. { bankAccountId, escrowAccountId, transferId } => { success(boolean) }
-
-### HTTP Request
-
-`POST http://example.com/transfer/start`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-bankAccountID | database ID of Bank Account that will send money
-escrowAccountID | database ID of Escrow Account that will receive money
-transferID | database ID of transfer, which will be updated with dwollaStatus, dwollaResourceURL, dwollaDestinationURL, dwollaTransferURL
-
-### Responses
-
-Parameter | Description
---------- | -----------
-successful:201 | success: true
-unsuccessful:400 | success:false, error: error, route: 'transfer/start'
 
 ## Finding connected Bank Accounts for a specific customer
 
@@ -562,7 +479,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/account/client-accounts/5ee3ad5cbdcb012345678910"
+curl "http://example.com/api/account/client-accounts/:id"
   -H "Authorization: your-api-key"
 ```
 
@@ -581,7 +498,7 @@ let max = api.kittens.get(2);
     { "name": "Silver Standard 0.1% Interest Saving", 
       "bankName": "Citi", 
       "accountNumber": "1111", 
-      "id": "5ee3ad5cbdcb012345678910", 
+      "id": "************************", 
       "balance": 200, 
       "institutionCode": "ins_4" , 
       "bankDisplayName": "Citi Savings" ,
@@ -594,17 +511,17 @@ This endpoint finds connected bank accounts for specific customer, returns infor
 
 ### HTTP Request
 
-`GET http://example.com/account/client-accounts/:id`
+`GET /account/client-accounts/{ID}`
 
-### URL Parameters
+### Request Parameters
 
-Parameter | Description
+Name | Description
 --------- | -----------
-id | database ID of customer
+ID | Database ID of customer
 
 ### Responses
 
-Parameter | Description
+Name | Description
 --------- | -----------
 successful:200 | accounts: []
 
@@ -625,7 +542,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/account/tenant-accounts/5ee3ad5cbdcb012345678910"
+curl "http://example.com/api/account/tenant-accounts/:id"
   -H "Authorization: your-api-key"
 ```
 
@@ -660,22 +577,22 @@ This endpoint finds connected bank accounts for specific tenant, returns informa
 
 ### HTTP Request
 
-`GET http://example.com/account/tenant-accounts/:id`
+`GET /account/tenant-accounts/{ID}`
 
-### URL Parameters
+### Request Parameters
 
-Parameter | Description
+Name | Description
 --------- | -----------
-id | database ID of tenant
+ID | Database ID of tenant
 
 ### Responses
 
-Parameter | Description
+Name | Description
 --------- | -----------
 successful:200 | accounts: []
-unsuccessful:400 | accounts: [], error:err, route: '/account/tenant-accounts/:id'
+unsuccessful:400 | accounts: [], error:err, route: '/account/tenant-accounts/{ID}'
 
-## saves a document to client in preparation for transfer > $5000
+## Subscribing a tenant for billing
 
 ```ruby
 require 'kittn'
@@ -692,7 +609,71 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/transfer/document/:transferId"
+curl "http://example.com/api/account/auth/:tenant_ID/billing"
+  -H "Authorization: your-api-key"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.get(2);
+```
+
+> The above command returns:
+
+```json
+{
+  "success": true, 
+  "billingAccountId": "5ed130372ad1c17318779c9e"
+}
+```
+
+This endpoint subscribes a tenant to be billed monthly & adds a Billing Account. Authenticates account and creates new billing account connected to tenant, adds subscription to Tenant.
+
+<aside class="success">
+This route has the same Tenant, Agent, and Tenant Exec requirements as /account/auth/{tenant_ID}/escrow
+</aside>
+
+### HTTP Request
+
+`POST /account/auth/{tenant_ID}/billing`
+
+### Request Parameters
+
+Name | Description
+--------- | -----------
+tenant_ID | Tenant database ID
+plaidAccountId | Account ID from plaid onSuccess
+publictoken | Public token from plaid onSuccess
+subscriptionId | Subscription ID
+agentId | Angent ID
+
+### Responses
+
+Namer | Description
+--------- | -----------
+successful:201 | success: true, billingAccountId: ID
+unsuccessful:400 | success:false, error: error, route: '/account/auth/create-tenant'
+
+## Initiating a transfer
+
+```ruby
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+api.kittens.get(2)
+```
+
+```python
+import kittn
+
+api = kittn.authorize('meowmeowmeow')
+api.kittens.get(2)
+```
+
+```shell
+curl "http://example.com/api/transfer/start"
   -H "Authorization: your-api-key"
 ```
 
@@ -705,26 +686,90 @@ let max = api.kittens.get(2);
 
 > The above command returns JSON structured like this:
 
+```json
+{ 
+  "success": true
+}
+```
 
-This endpoint saves a document to client in preparation for transfer > $5000. { documentType, assetId }
+This endpoint is the primary route for initiating a transfer. Will initiate an ACH transfer, save dwollaStatus, dwollaSourceURL.
 
 ### HTTP Request
 
-`GET http://example.com/transfer/document/:transferId`
+`POST /transfer/start`
 
-### URL Parameters
+### Request Parameters
 
-Parameter | Description
+Name | Description
 --------- | -----------
-documentType | type of document: ( 'passport', 'license' )
-assetId | corresponding asset ID in file service
-documentUrl | unique document URL for uploaded document in Dwolla. Returned from this route
+bankAccountID | database ID of Bank Account that will send money
+escrowAccountID | database ID of Escrow Account that will receive money
+transferID | database ID of transfer, which will be updated with dwollaStatus, dwollaResourceURL, dwollaDestinationURL, dwollaTransferURL
 
 ### Responses
 
-Parameter | Description
+Name | Description
 --------- | -----------
-successful:200 | success: true, documentUrl
+successful:201 | success: true
+unsuccessful:400 | success:false, error: error, route: 'transfer/start'
+
+
+## Saving a document to client in preparation for transfer > $5000
+
+```ruby
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+api.kittens.get(2)
+```
+
+```python
+import kittn
+
+api = kittn.authorize('meowmeowmeow')
+api.kittens.get(2)
+```
+
+```shell
+curl "http://example.com/api/transfer/document/5ee8063e6c1f3346b6adc9fe"
+  -H "Authorization: your-api-key"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.get(2);
+```
+
+> The above command returns:
+
+```json 
+{
+  "success" : true,
+  "documentUrl" : "https://api-sandbox.dwolla.com/transfers/df8740c5-edbb-ea11-8125-fd127c7b5ea8"
+}
+```
+
+This endpoint saves a document to client in preparation for transfer > $5000. 
+
+### HTTP Request
+
+`GET /transfer/document/{transferId}`
+
+### Request Parameters
+
+Name | Description
+--------- | -----------
+documentType | Type of document: ( 'passport', 'license' )
+assetId | Corresponding asset ID in file service
+documentUrl | Unique document URL for uploaded document in Dwolla. Returned from this route
+
+### Responses
+
+Name | Description
+--------- | -----------
+successful:200 | success: true, {documentUrl}
 unsuccessful:400 | success: false, route, error
 
 
@@ -765,66 +810,26 @@ let max = api.kittens.delete(2);
 }
 ```
 
-This endpoint deactivates a client bank account in Plaid/Dwolla. { bankAccountId } => { success (boolean) }
+This endpoint deactivates a client bank account in Plaid/Dwolla. 
 
 ### HTTP Request
 
-`DELETE http://example.com/account/`
+`DELETE /account/`
+
+### Request Parameters
+
+Name | Description
+--------- | ------------
+bankAccountId | Client bank account ID
 
 ### Responses
 
-Parameter | Description
+Name | Description
 --------- | -----------
 successful:204 | success: true 
 unsuccessful:400 | success: false, route 'DELETE/account/', erroe: err
 
 # Email-service
-
-## Get API version
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/email/version"
-  -H "Authorization: your-api-key"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "API version ****"
-  }
-]
-```
-
-This endpoint returns API version.
-
-### HTTP Request
-
-`GET http://example.com/api/email/version`
-
-
 ## Sending transfer receipt with attached asset
 
 ```ruby
@@ -853,18 +858,6 @@ let api = kittn.authorize('meowmeowmeow');
 let max = api.kittens.get(2);
 ```
 
-> Request.body example:
-
-```json
-{
-  "TENANT_GUID" : "########################", // required
-    "CLIENT_GUID" : "########################", // required
-    "TRANSFER_GUID" : "########################", // required
-    "ASSET_GUID" : "########################.jpg", // required
-    "emailRecipients": ["test.test@gmail.com", "test.test+2@gmail.com"] // required
-}
-```
-
 > The above command returns JSON structured like this:
 
 ```json
@@ -891,58 +884,22 @@ let max = api.kittens.get(2);
 }
 ```
 
-This endpoint send the transfer receipt with attached asset. Uses S3GetObject to fetch attachment with key /TENANT_GUID/CLIENT_GUID/TRANSFER_GUID/ASSET_GUID. emailRecipients is an array and has to contain at least 1 email. uses CLIENT_GUID and TRANSFER_GUID to fetch transfer objects and dynamically populate email. 
+This endpoint send the transfer receipt with attached asset. Uses S3GetObject to fetch attachment with key /TENANT_GUID/CLIENT_GUID/TRANSFER_GUID/ASSET_GUID. Uses CLIENT_GUID and TRANSFER_GUID to fetch transfer objects and dynamically populate email. 
 
 
 ### HTTP Request
 
-`GET http://example.com/email/receipt`
+`POST /email/receipt`
+
+### Request Parameters
+
+Name | Description
+--------- | -----------
+Transfer_GUID | "########################", // required
+emailRecipients | ["test.test@gmail.com", "test.test+2@gmail.com"] // required (atleast 1 email)
+emailFrom | 'test@gmail.com'
 
 # File-service
-
-## Get API version
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/assets/version"
-  -H "Authorization: your-api-key"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  "API version ****"
-]
-```
-
-This endpoint returns API version.
-
-### HTTP Request
-
-`GET http://example.com/api/assets/version`
-
-
 ## Getting images in public img bucket
 
 ```ruby
@@ -971,15 +928,11 @@ let api = kittn.authorize('meowmeowmeow');
 let max = api.kittens.get(2);
 ```
 
-> The above command returns JSON structured like this:
+> The above command returns:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  
 }
 ```
 
@@ -987,7 +940,7 @@ This endpoint gets all images in public img bucket.
 
 ### HTTP Request
 
-`GET http://example.com/assets/public/imgs`
+`GET /assets/public/imgs`
 
 ## Uploading images to public img bucket
 
@@ -1017,7 +970,7 @@ let api = kittn.authorize('meowmeowmeow');
 let max = api.kittens.get(2);
 ```
 
-> The above command returns JSON structured like this:
+> The above command returns:
 
 ```json
 {
@@ -1044,11 +997,11 @@ let max = api.kittens.get(2);
 }
 ```
 
-This endpoint uploads images to public img bucket.  
+This endpoint uploads images to public img bucket. Expects multi-form payload. First & second needs to be field text (required). Second field is a file with key = 'logo'. Third field is a file with key = 'backgroundImage'. After s3 upload server updates paymint.io graphql server tenant { branding { logoURL backgroundImageURL } }.
 
 ### HTTP Request
 
-`POST http://example.com/assets/public`
+`POST /assets/public`
 
 ## Uploading images to private img bucket
 
@@ -1078,7 +1031,7 @@ let api = kittn.authorize('meowmeowmeow');
 let max = api.kittens.get(2);
 ```
 
-> The above command returns JSON structured like this:
+> The above command returns:
 
 ```json
 {
@@ -1101,11 +1054,11 @@ let max = api.kittens.get(2);
 }
 ```
 
-This endpoint uploads images to private img bucket.  
+This endpoint uploads images to private img bucket. First three forms should be TENANT_GUID, CLIENT_GUID, and TRANSFER_GUID(required). Forms 4 through 6 will be the files labeled, escrow-agreement, receipt, id-copy 
 
 ### HTTP Request
 
-`POST http://example.com/assets/private`
+`POST /assets/private`
 
 ## Getting list of files associated with tenant, client and transfer GUID
 
@@ -1135,7 +1088,7 @@ let api = kittn.authorize('meowmeowmeow');
 let max = api.kittens.get(2);
 ```
 
-> The above command returns JSON structured like this:
+> The above command returns file list as array objects like this:
 
 ```json
 {
@@ -1155,7 +1108,7 @@ This endpoint gets list of all files associated with tenant, client and transfer
 
 ### HTTP Request
 
-`GET /assets/private/:TENANT_GUID/:CLIENT_GUID/:TRANSFER_GUID`
+`GET /assets/private/{TENANT_GUID}/{CLIENT_GUID}/{TRANSFER_GUID}`
 
 ## Response streams file back to client
 
@@ -1197,5 +1150,5 @@ This endpoint response streams file back to client associated with tenant, clien
 
 ### HTTP Request
 
-`GET /assets/private/:TENANT_GUID/:CLIENT_GUID/:TRANSFER_GUID/:ASSET_GUID`
+`GET /assets/private/{TENANT_GUID}/{CLIENT_GUID}/{TRANSFER_GUID}/{ASSET_GUID}`
 
