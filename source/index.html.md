@@ -86,7 +86,7 @@ api.kittens.get()
 ```
 
 ```shell
-curl "http://example.com/api/users"
+curl "http://api.paymints.dev/api/users"
   -H "Authorization: your-api-key"
 ```
 
@@ -141,7 +141,7 @@ api.kittens.get()
 ```
 
 ```shell
-curl "http://example.com/api/users/**********"
+curl "http://api.paymints.dev/api/users/**********"
   -H "Authorization: your-api-key"
 ```
 
@@ -234,7 +234,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/users/**********/**********"
+curl "http://api.paymints.dev/api/users/**********/**********"
   -H "Authorization: your-api-key"
 ```
 
@@ -303,7 +303,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/users/:tenant_GUID/:user_GUID"
+curl "http://api.paymints.dev/api/users/:tenant_GUID/:user_GUID"
   -H "Authorization: your-api-key"
 ```
 
@@ -353,7 +353,7 @@ api.kittens.get()
 ```
 
 ```shell
-curl "http://example.com/api/account/auth/create-client"
+curl "http://api.paymints.dev/api/account/auth/create-client"
   -H "Authorization: your-api-key"
 ```
 
@@ -416,7 +416,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/account/auth/:tenant_ID/escrow"
+curl "http://api.paymints.dev/api/account/auth/:tenant_ID/escrow"
   -H "Authorization: your-api-key"
 ```
 
@@ -479,7 +479,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/account/client-accounts/:id"
+curl "http://api.paymints.dev/api/account/client-accounts/:id"
   -H "Authorization: your-api-key"
 ```
 
@@ -542,7 +542,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/account/tenant-accounts/:id"
+curl "http://api.paymints.dev/api/account/tenant-accounts/:id"
   -H "Authorization: your-api-key"
 ```
 
@@ -609,7 +609,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/account/auth/:tenant_ID/billing"
+curl "http://api.paymints.dev/api/account/auth/:tenant_ID/billing"
   -H "Authorization: your-api-key"
 ```
 
@@ -673,7 +673,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/transfer/start"
+curl "http://api.paymints.dev/api/transfer/start"
   -H "Authorization: your-api-key"
 ```
 
@@ -731,7 +731,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/transfer/document/5ee8063e6c1f3346b6adc9fe"
+curl "http://api.paymints.dev/api/transfer/document/5ee8063e6c1f3346b6adc9fe"
   -H "Authorization: your-api-key"
 ```
 
@@ -790,7 +790,7 @@ api.kittens.delete(2)
 ```
 
 ```shell
-curl "http://example.com/account"
+curl "http://api.paymints.dev/account"
   -X DELETE
   -H "Authorization: your-api-key"
 ```
@@ -847,7 +847,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/email/receipt"
+curl "http://api.paymints.dev/api/email/receipt"
   -H "Authorization: your-api-key"
 ```
 
@@ -917,7 +917,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/assets/public/imgs"
+curl "http://api.paymints.dev/api/assets/public/imgs"
   -H "Authorization: your-api-key"
 ```
 
@@ -989,7 +989,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/assets/public
+curl "http://api.paymints.dev/api/assets/public
   -H "Authorization: your-api-key"
 ```
 
@@ -1050,7 +1050,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/assets/private
+curl "http://api.paymints.dev/api/assets/private
   -H "Authorization: your-api-key"
 ```
 
@@ -1157,7 +1157,7 @@ api.kittens.get(2)
 ```
 
 ```shell
-curl "http://example.com/api/assets/private/**********/**********/**********/
+curl "http://api.paymints.dev/api/assets/private/**********/**********/**********/
   -H "Authorization: your-api-key"
 ```
 
