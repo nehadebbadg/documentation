@@ -714,7 +714,7 @@ successful:201 | success: true
 unsuccessful:400 | success:false, error: error, route: 'transfer/start'
 
 
-## Saving a document to client in preparation for transfer > $5000
+## Saving a document to client in preparation for transfer > $150000
 
 ```ruby
 require 'kittn'
@@ -751,7 +751,7 @@ let max = api.kittens.get(2);
 }
 ```
 
-This endpoint saves a document to client in preparation for transfer > $5000. 
+This endpoint saves a document to client in preparation for transfer > $150000. 
 
 ### HTTP Request
 
