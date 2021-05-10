@@ -67,6 +67,132 @@ Paymints expects for the API key to be included in all API requests to the serve
 You must replace <code>your-api-key</code> with your personal API key.
 </aside>
 
+# Search
+
+## Search all transfers
+
+```ruby
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+api.kittens.get
+```
+
+```python
+import kittn
+
+api = kittn.authorize('meowmeowmeow')
+api.kittens.get()
+```
+
+```shell
+curl "http://api.paymints.dev/api/search/all-transfers"
+  -H "Authorization: your-api-key"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let kittens = api.kittens.get();
+```
+> Request body:
+
+```json
+{
+    "email": "",
+    "firstName": "",
+    "lastName": "",
+    "propertyAddress1": "",
+    "propertyAddress2": "",
+    "propertyZipcode": "",
+    "propertyState": "",
+    "propertyCity": "",
+    "purpose": "",
+    "amount": {
+      "min": 0,
+      "max": 100000
+    },
+    "tenantGUID": ""
+  }
+```
+
+> The above command returns:
+
+```json
+{
+    "search transfer info"
+}
+```
+
+This endpoint searches transfers filtering by tenantGUID. Amount max and min optional defaults to 0-100,000. TenantGUID is required and all other fields are optional.
+
+### HTTP Request
+
+`POST /search/all-transfers`
+
+## Search all clients
+
+```ruby
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+api.kittens.get
+```
+
+```python
+import kittn
+
+api = kittn.authorize('meowmeowmeow')
+api.kittens.get()
+```
+
+```shell
+curl "http://api.paymints.dev/api/search/all-clients"
+  -H "Authorization: your-api-key"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let kittens = api.kittens.get();
+```
+> Request body:
+
+```json
+{
+    "email": "",
+    "firstName": "",
+    "lastName": "",
+    "propertyAddress1": "",
+    "propertyAddress2": "",
+    "propertyZipcode": "",
+    "propertyState": "",
+    "propertyCity": "",
+    "purpose": "",
+    "amount": {
+      "min": 0,
+      "max": 100000
+    },
+    "tenantGUID": ""
+  }
+```
+
+> The above command returns:
+
+```json
+{
+    "search client info"
+}
+```
+
+This endpoint searches clients filtering by tenantGUID. Amount max and min optional defaults to 0-100,000. TenantGUID is required and all other fields are optional.
+
+### HTTP Request
+
+`POST /search/all-clients`
+
 # Users
 
 ## Adding new users
